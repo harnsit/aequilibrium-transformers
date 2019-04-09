@@ -54,6 +54,10 @@ This will give output like (both died in this single battle):
 
 To have a battle with all transformers, run without optional ids `curl localhost:8080/battle`.
 
+## Assumptions
+
+If no team wins, then winning team list as well as losing survivors will be empty (though there will be survivors).
+
 ## Future
 
 It would be interesting to have dead transformers marked as killed in DB and have more join in for next set of battles. It would need code changes if more teams need to be added. We would need to add to team enum and ask input in REST call which team vs team battle you wish to see.
