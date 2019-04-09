@@ -2,8 +2,8 @@ package com.harpreet.dao;
 
 import com.harpreet.dto.Transformer;
 
-import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public interface TransformerDAO {
 
@@ -11,7 +11,7 @@ public interface TransformerDAO {
 
     int getCount();
 
-    List<Transformer> getTransformers();
+    Stream<Transformer> getTransformers();
 
     void updateTransformer(Transformer transformer);
 

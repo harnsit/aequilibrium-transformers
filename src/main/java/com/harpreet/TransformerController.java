@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -81,19 +82,27 @@ public class TransformerController {
 
     @RequestMapping(value = "/transformers")
     public ResponseEntity<ListResponse> listTransformers() {
-        return new ResponseEntity<>(
-                ListResponse.builder()
-                        .transformers(transformerDAO.getTransformers())
-                        .build(),
-                HttpStatus.OK
-        );
+        ListResponse.ListResponseBuilder respBuilder = ListResponse.builder();
+        if (transformerDAO.getCount() == 0) {
+            respBuilder.transformers(new ArrayList<>());
+        } else respBuilder.transformers(transformerDAO
+                .getTransformers()
+                .collect(Collectors.toList()));
+        return new ResponseEntity<>(respBuilder.build(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/battle")
-    public ResponseEntity<BattleResult> battle(@RequestParam List<UUID> ids) {
-        List<Transformer> transformers = ids.stream().map(
-                i -> transformerDAO.getTransformer(i)
-        ).collect(Collectors.toList());
+    public ResponseEntity<BattleResult> battle(@RequestParam(required = false) List<UUID> ids) {
+        List<Transformer> transformers;
+        if (ids != null) {
+            transformers = ids.stream().map(
+                    i -> transformerDAO.getTransformer(i)
+            ).collect(Collectors.toList());
+        } else {
+            transformers = transformerDAO
+                    .getTransformers()
+                    .collect(Collectors.toList());
+        }
         if (transformers.stream().anyMatch(Objects::isNull))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Battle battle = new Battle(transformers);

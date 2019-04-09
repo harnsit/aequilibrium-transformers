@@ -3,11 +3,10 @@ package com.harpreet.dao;
 import com.harpreet.dto.Transformer;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 @Component
 public class InMemoryTransformerDAO implements TransformerDAO {
@@ -28,8 +27,8 @@ public class InMemoryTransformerDAO implements TransformerDAO {
     }
 
     @Override
-    public List<Transformer> getTransformers() {
-        return new LinkedList<>(transformerHashMap.values());
+    public Stream<Transformer> getTransformers() {
+        return transformerHashMap.values().stream();
     }
 
     @Override
